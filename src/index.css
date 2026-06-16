@@ -48,6 +48,7 @@ html, body, #root {
 body {
   background: var(--bg);
   overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 button {

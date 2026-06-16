@@ -313,6 +313,18 @@
   transform: rotate(45deg) translate(-0.5px, -1px);
 }
 .table thead .cb { background: var(--surface); }
+.cb:indeterminate {
+  background: var(--blue-strong);
+  border-color: var(--blue-strong);
+}
+.cb:indeterminate::after {
+  content: '';
+  width: 8px;
+  height: 2px;
+  border: none;
+  background: #fff;
+  transform: none;
+}
 
 /* badge */
 .badge {
@@ -452,6 +464,17 @@
 }
 .ideas-title { font-size: 16px; line-height: 24px; color: var(--text-1); }
 .ideas-count { font-size: 12px; color: var(--text-muted-2); }
+.ideas-head-right { display: flex; align-items: center; gap: 16px; }
+.select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+.select-all:hover { color: #fff; }
 
 .idea-list { display: flex; flex-direction: column; gap: 16px; }
 .idea-card {

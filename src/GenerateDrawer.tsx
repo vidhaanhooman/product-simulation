@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { X, Pencil, Trash2, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Pencil, Trash2, ChevronRight, ChevronLeft } from 'lucide-react';
 import { GENERATED_IDEAS, type Idea } from './data';
 
-type Step = 'generating' | 'thinking' | 'ideas' | 'finalizing';
+type Step = 'thinking' | 'ideas' | 'finalizing';
 
 interface Props {
   onClose: () => void;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function GenerateDrawer({ onClose, onComplete }: Props) {
-  const [step, setStep] = useState<Step>('generating');
+  const [step, setStep] = useState<Step>('thinking');
   const [ideas, setIdeas] = useState<Idea[]>(GENERATED_IDEAS);
   const [selected, setSelected] = useState<Set<string>>(
     () => new Set(GENERATED_IDEAS.map((i) => i.id)),
@@ -19,14 +19,10 @@ export default function GenerateDrawer({ onClose, onComplete }: Props) {
   const [draft, setDraft] = useState('');
   const [traceOpen, setTraceOpen] = useState(false);
 
-  // Step machine: generating -> thinking -> ideas
+  // Step machine: thinking (generating ideas) -> ideas
   useEffect(() => {
-    if (step === 'generating') {
-      const t = setTimeout(() => setStep('thinking'), 1600);
-      return () => clearTimeout(t);
-    }
     if (step === 'thinking') {
-      const t = setTimeout(() => setStep('ideas'), 1900);
+      const t = setTimeout(() => setStep('ideas'), 2200);
       return () => clearTimeout(t);
     }
   }, [step]);
@@ -71,7 +67,7 @@ export default function GenerateDrawer({ onClose, onComplete }: Props) {
   };
 
   const isEditingFlow = editingId !== null;
-  const primaryLabel = isEditingFlow ? 'Generate Scenario' : 'Add Selected Scenarios';
+  const primaryLabel = 'Generate Scenario';
 
   return (
     <>
@@ -82,24 +78,19 @@ export default function GenerateDrawer({ onClose, onComplete }: Props) {
           <div>
             <div className="drawer-title">New conversation scenario</div>
             <div className="drawer-subtitle">
-              {step === 'generating' || step === 'finalizing'
+              {step === 'finalizing'
                 ? 'Analyzing requirements and preparing scenario suggestions...'
                 : "Define the user's situation and what the agent is expected to do"}
             </div>
           </div>
-          <button className="drawer-close" onClick={onClose} aria-label="Close">
-            <X size={20} strokeWidth={1.75} />
-          </button>
         </div>
 
         {/* Body */}
         <div className="drawer-body">
-          {(step === 'generating' || step === 'finalizing') && (
+          {step === 'finalizing' && (
             <div className="center-state">
               <img src="/SVG.svg" className="sparkle" width={48} height={48} alt="" />
-              <span className="label">
-                {step === 'generating' ? 'Generating ideas' : 'Generating scenario'}
-              </span>
+              <span className="label">Generating scenario</span>
             </div>
           )}
 
@@ -206,9 +197,6 @@ export default function GenerateDrawer({ onClose, onComplete }: Props) {
               Back
             </button>
             <div className="footer-right">
-              <button className="btn-cancel" onClick={onClose}>
-                Cancel
-              </button>
               <button
                 className="btn-add"
                 onClick={handleAdd}
